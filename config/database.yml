@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  url: <%= ENV.fetch("DATABASE_URL") %>
+  pool: 5
+
+development:
+  <<: *default
+  database: police_data_development
+
+test:
+  <<: *default
+  database: police_data_test
+
+production:
+  <<: *default
+  pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
