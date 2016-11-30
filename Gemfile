@@ -8,6 +8,10 @@ gem "pg", "~> 0.15"
 gem "jquery-rails"
 gem "jbuilder", "~> 2.0"
 
+gem 'sass-rails'
+gem 'uglifier'
+gem 'coffee-rails'
+
 group :development, :test do
   gem "pry"
   gem "pry-byebug"
