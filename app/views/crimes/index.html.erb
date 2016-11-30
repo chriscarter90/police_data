@@ -1,8 +1,26 @@
 <h1><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h1>
 
 <%= form_tag('/crimes', remote: true, method: :get) do |form| %>
-  <%= select_tag('category', options_for_select(@categories), include_blank: 'All') %>
-  <%= select_tag('outcome', options_for_select(@outcomes), include_blank: 'All') %>
+  <ul>
+    <h4>Categories</h4>
+    <% @categories.each do |category| %>
+      <li>
+        <%= label_tag "category_#{category.parameterize(separator: '_')}", category %>
+        <%= check_box_tag "category[]", category, false, :id => "category_#{category.parameterize(separator: '_')}" %>
+      </li>
+    <% end %>
+  </ul>
+
+  <ul>
+    <h4>Outcomes</h4>
+
+    <% @outcomes.each do |outcome| %>
+      <li>
+        <%= label_tag "outcome_#{outcome.parameterize(separator: '_')}", outcome %>
+        <%= check_box_tag "outcome[]", outcome, false, :id => "outcome_#{outcome.parameterize(separator: '_')}" %>
+      </li>
+    <% end %>
+  </ul>
 
   <%= submit_tag 'Find counts' %>
 <% end %>
