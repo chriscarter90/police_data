@@ -1,14 +1,15 @@
 <h1><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h1>
 
 <%= form_tag('/crimes', remote: true, method: :get) do |form| %>
-  <%= select_tag('category', options_for_select(@categories)) %>
+  <%= select_tag('category', options_for_select(@categories), include_blank: 'All') %>
 
+  <%= submit_tag 'WAAAA' %>
 <% end %>
 
 <script>
-
-$('#category').change(function() {
-  $(this).form.submit();
-});
-
+//
+// $('#category').change(function() {
+//   $(this.form).submit();
+// });
+//
 </script>

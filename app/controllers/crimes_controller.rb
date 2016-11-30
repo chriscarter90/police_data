@@ -1,7 +1,7 @@
 class CrimesController < ApplicationController
   def index
     respond_to do |format|
-      if params['category']
+      if params['category'].present?
         @count = Crime.where(crime_type: params['category']).count
       else
         @count = Crime.count
