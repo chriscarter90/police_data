@@ -50,6 +50,8 @@ GEM
       execjs
     coffee-script-source (1.11.1)
     concurrent-ruby (1.0.2)
+    d3_rails (4.1.1)
+      railties (>= 3.1.0)
     dotenv (2.1.1)
     dotenv-rails (2.1.1)
       dotenv (= 2.1.1)
@@ -146,6 +148,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails
+  d3_rails
   dotenv-rails
   jbuilder (~> 2.0)
   jquery-rails
@@ -157,4 +160,4 @@ DEPENDENCIES
   uglifier
 
 BUNDLED WITH
-   1.12.5
+   1.13.2

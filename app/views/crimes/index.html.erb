@@ -1,26 +1,78 @@
 <h1><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h1>
 
-<%= form_tag('/crimes', remote: true, method: :get) do |form| %>
-  <ul>
-    <h4>Categories</h4>
-    <% @categories.each do |category| %>
-      <li>
-        <%= label_tag "category_#{category.parameterize(separator: '_')}", category %>
-        <%= check_box_tag "category[]", category, false, :id => "category_#{category.parameterize(separator: '_')}" %>
+<div id="crime-filter">
+  <div id="crime-filter-categories">
+    <ul>
+      <h4>Categories</h4>
+      <% @categories.each do |category| %>
+        <li>
+      <%= label_tag "category_#{category.parameterize(separator: '_')}", category %>
+      <%= check_box_tag "category[]", category, false, :id => "category_#{category.parameterize(separator: '_')}" %>
       </li>
     <% end %>
-  </ul>
+    </ul>
+  </div>
 
-  <ul>
-    <h4>Outcomes</h4>
-
-    <% @outcomes.each do |outcome| %>
-      <li>
-        <%= label_tag "outcome_#{outcome.parameterize(separator: '_')}", outcome %>
-        <%= check_box_tag "outcome[]", outcome, false, :id => "outcome_#{outcome.parameterize(separator: '_')}" %>
+  <div id="crime-filter-outcomes">
+    <ul>
+      <h4>Outcomes</h4>
+      <% @outcomes.each do |outcome| %>
+        <li>
+      <%= label_tag "outcome_#{outcome.parameterize(separator: '_')}", outcome %>
+      <%= check_box_tag "outcome[]", outcome, false, :id => "outcome_#{outcome.parameterize(separator: '_')}" %>
       </li>
     <% end %>
-  </ul>
+    </ul>
+  </div>
 
-  <%= submit_tag 'Find counts' %>
-<% end %>
+  <%= button_tag 'Filter', id: 'crime-filter-button' %>
+</div>
+
+<div id="d3"></div>
+
+<script>
+$('#crime-filter-button').click(function(e) {
+    var checkedCategories = [],
+        checkedOutcomes = [];
+
+    e.preventDefault();
+
+    checkedCategories = $.map($('#crime-filter-categories').find('input[type=checkbox]:checked'), function(elem) { return $(elem).val(); });
+    checkedOutcomes = $.map($('#crime-filter-outcomes').find('input[type=checkbox]:checked'), function(elem) { return $(elem).val(); });
+
+    $.getJSON(
+      '/crimes', {category: checkedCategories, outcome: checkedOutcomes}
+    ).done(function(data) {
+      var totalCount = data.totalCount;
+      var breakdowns = data.breakdowns;
+
+      $('#crime-count').text(totalCount);
+
+      var svg;
+
+      if ($("#d3 svg").length) {
+        var svg = d3.select("#d3 svg");
+      } else {
+        var svg = d3.select("#d3")
+          .append("svg")
+          .attr("width", 500)
+          .attr("height", 100);
+      }
+
+      bars = svg.selectAll("rect")
+      .data(
+        $.map(breakdowns, function(arr) { return arr[1] } )
+        )
+      .enter()
+      .append("rect");
+
+      bars.transition().duration(300).attr("x", function(d, i) {
+          return (i * 22);
+        }).attr("y", function(d, i) {
+          return 100 - (d / 1000);
+        }).attr("height", function(d) {
+          return (d / 1000);
+        }).attr("width", 20);
+    });
+});
+</script>

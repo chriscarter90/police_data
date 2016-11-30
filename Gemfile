@@ -8,6 +8,8 @@ gem "pg", "~> 0.15"
 gem "jquery-rails"
 gem "jbuilder", "~> 2.0"
 
+gem 'd3_rails'
+
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'
