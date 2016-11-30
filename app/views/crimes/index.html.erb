@@ -30,6 +30,14 @@
 
 <div id="d3"></div>
 
+<style>
+  #d3 svg {
+    border: 1px solid black;
+    margin: 30px;
+    padding: 30px;
+  }
+</style>
+
 <script>
 $('#crime-filter-button').click(function(e) {
     var checkedCategories = [],
@@ -55,24 +63,86 @@ $('#crime-filter-button').click(function(e) {
       } else {
         var svg = d3.select("#d3")
           .append("svg")
-          .attr("width", 500)
-          .attr("height", 100);
+          .attr("width", 400)
+          .attr("height", 500);
       }
 
-      bars = svg.selectAll("rect")
-      .data(
-        $.map(breakdowns, function(arr) { return arr[1] } )
-        )
-      .enter()
-      .append("rect");
+      breakdownMonths = $.map(breakdowns, function(arr) { return arr[0] });
+      breakdownValues = $.map(breakdowns, function(arr) { return arr[1] });
 
-      bars.transition().duration(300).attr("x", function(d, i) {
-          return (i * 22);
-        }).attr("y", function(d, i) {
-          return 100 - (d / 1000);
-        }).attr("height", function(d) {
-          return (d / 1000);
-        }).attr("width", 20);
+      var maxValue = Math.max.apply(Math, breakdownValues);
+
+      var barX = function(d, i) { return (i * 44); };
+      var barY = function(d, i) { return (100 + (200 - (d / maxValue * 200))); };
+      var barHeight = function(d) { return (d / maxValue * 200); };
+      var barWidth = 40;
+
+      bars = svg.selectAll("rect")
+        .data(breakdownValues);
+
+      bars.exit().transition().attr("height", 0).remove();
+
+      bars.enter()
+        .append("rect")
+        .attr("x", barX)
+        .attr("y", 300)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .transition()
+        .attr("height", barHeight)
+        .attr("y", barY);
+
+      bars.attr("x", barX)
+        .attr("width", barWidth)
+        .transition()
+        .attr("height", barHeight)
+        .attr("y", barY);
+
+      text = svg.selectAll("text.x-label")
+        .data(breakdownMonths);
+
+      text.exit().remove();
+
+      textRotate = function(d, i) { return "rotate(90," + barX(d, i) + ",200)"; };
+      textX = function(d, i) { return 110 + barX(d, i); };
+
+      text.enter()
+        .append("text")
+        .attr("x", textX)
+        .attr("y", 190)
+        .attr("transform", textRotate)
+        .attr("style", "font-family: 'Arial'; font-size: 32px;")
+        .attr("class", "x-label")
+        .text(function(d) { return d });
+
+      text.attr("x", textX)
+        .attr("y", 190)
+        .attr("transform", textRotate)
+        .attr("style", "font-family: 'Arial'; font-size: 32px;")
+        .attr("class", "x-label")
+        .text(function(d) { return d });
+
+    label = svg.selectAll("text.val-label")
+      .data(breakdownValues);
+
+    label.exit().remove();
+
+    label.enter()
+      .append("text")
+      .attr("x", function(d, i) { return 20 + barX(d, i); })
+      .attr("y", function(d) { return (95 + (200 - d / maxValue * 200)); })
+      .attr("style", "font-family: 'Arial'; font-size: 12px;")
+      .attr("class", "val-label")
+      .attr("text-anchor", "middle")
+      .text(function(d) { return d });
+
+    label.attr("x", function(d, i) { return 20 + barX(d, i); })
+      .attr("style", "font-family: 'Arial'; font-size: 12px;")
+      .attr("class", "x-label")
+      .attr("text-anchor", "middle")
+      .text(function(d) { return d })
+      .transition()
+      .attr("y", function(d) { return (95 + (200 - d / maxValue * 200)); });
     });
-});
+  });
 </script>
