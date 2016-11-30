@@ -7,7 +7,7 @@ class CreateCrimes < ActiveRecord::Migration[5.0]
       t.decimal :lat, null: true
       t.decimal :lng, null: true
       t.string :location, null: true
-      t.string :type
+      t.string :crime_type
       t.string :outcome
     end
   end

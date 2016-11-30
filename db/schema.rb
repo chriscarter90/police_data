@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20161129092722) do
     t.decimal "lat"
     t.decimal "lng"
     t.string  "location"
-    t.string  "type"
+    t.string  "crime_type"
     t.string  "outcome"
   end
 
