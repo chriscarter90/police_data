@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  get '/crimes', to: 'crimes#index'
+  root to: "crimes#index"
+
+  get "/crimes", to: "crimes#index"
 end

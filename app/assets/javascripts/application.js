@@ -12,5 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require flat-ui-pro
 //= require d3
 //= require_tree .

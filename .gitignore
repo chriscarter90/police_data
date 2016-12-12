@@ -12,5 +12,7 @@
 !/log/.keep
 /tmp
 
+**/**/.DS_Store
+
 .ruby-version
 .env.local
