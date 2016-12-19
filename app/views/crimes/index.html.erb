@@ -2,7 +2,7 @@
   <h3><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h3>
 
   <div class="col-md-6">
-    <%= button_tag 'Filter', id: 'crime-filter-button' %>
+    <%= button_tag 'Filter', class: 'crime-filter-button' %>
 
     <div id="crime-filter">
       <div id="crime-filter-categories">
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <%= button_tag 'Filter', id: 'crime-filter-button' %>
+    <%= button_tag 'Filter', class: 'crime-filter-button' %>
   </div>
 
   <div class="col-md-6">
@@ -47,7 +47,7 @@
 </style>
 
 <script>
-$('#crime-filter-button').click(function(e) {
+$('.crime-filter-button').click(function(e) {
     var checkedCategories = [],
         checkedOutcomes = [];
 

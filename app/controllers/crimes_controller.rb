@@ -1,9 +1,9 @@
 class CrimesController < ApplicationController
   def index
     respond_to do |format|
-      scope = Crime
-      scope = scope.where(crime_type: params['category']) if params['category'].present?
-      scope = scope.where(outcome: params['outcome']) if params['outcome'].present?
+      scope = Crime.all
+      scope = scope.for_crime_type(params['category']) if params['category'].present?
+      scope = scope.with_outcome(params['outcome']) if params['outcome'].present?
 
       @count = scope.count
 
@@ -15,7 +15,7 @@ class CrimesController < ApplicationController
       format.json {
         render json: {
           totalCount: @count,
-          breakdowns: scope.group(:date).order(:date).count.to_a
+          breakdowns: Crime.group_by_month(scope).map { |m| [m.date, m.total] }
         }
       }
     end
