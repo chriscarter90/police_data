@@ -1,39 +1,47 @@
-<h1><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h1>
+<div class="row">
+  <h3><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h3>
 
-<div id="crime-filter">
-  <div id="crime-filter-categories">
-    <ul>
-      <h4>Categories</h4>
-      <% @categories.each do |category| %>
-        <li>
-      <%= label_tag "category_#{category.parameterize(separator: '_')}", category %>
-      <%= check_box_tag "category[]", category, false, :id => "category_#{category.parameterize(separator: '_')}" %>
-      </li>
-    <% end %>
-    </ul>
+  <div class="col-md-6">
+    <%= button_tag 'Filter', id: 'crime-filter-button' %>
+
+    <div id="crime-filter">
+      <div id="crime-filter-categories">
+        <h4>Categories</h4>
+        <div class="form-group">
+          <% @categories.each do |category| %>
+            <%= label_tag "category_#{category.parameterize(separator: '_')}" do %>
+              <%= check_box_tag "category[]", category, false, :id => "category_#{category.parameterize(separator: '_')}" %> <%= category %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <div id="crime-filter-outcomes">
+        <h4>Outcomes</h4>
+        <div class="form-group">
+          <% @outcomes.each do |outcome| %>
+            <%= label_tag "outcome_#{outcome.parameterize(separator: '_')}" do %>
+              <%= check_box_tag "outcome[]", outcome, false, :id => "outcome_#{outcome.parameterize(separator: '_')}" %> <%= outcome %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%= button_tag 'Filter', id: 'crime-filter-button' %>
   </div>
 
-  <div id="crime-filter-outcomes">
-    <ul>
-      <h4>Outcomes</h4>
-      <% @outcomes.each do |outcome| %>
-        <li>
-      <%= label_tag "outcome_#{outcome.parameterize(separator: '_')}", outcome %>
-      <%= check_box_tag "outcome[]", outcome, false, :id => "outcome_#{outcome.parameterize(separator: '_')}" %>
-      </li>
-    <% end %>
-    </ul>
+  <div class="col-md-6">
+    <div id="d3"></div>
   </div>
-
-  <%= button_tag 'Filter', id: 'crime-filter-button' %>
 </div>
 
-<div id="d3"></div>
+
 
 <style>
   #d3 svg {
     border: 1px solid black;
-    margin: 30px;
+    margin: 30px 0;
     padding: 30px;
   }
 </style>
@@ -63,7 +71,7 @@ $('#crime-filter-button').click(function(e) {
       } else {
         var svg = d3.select("#d3")
           .append("svg")
-          .attr("width", 400)
+          .attr("width", "100%")
           .attr("height", 500);
       }
 
@@ -73,7 +81,7 @@ $('#crime-filter-button').click(function(e) {
       var maxValue = Math.max.apply(Math, breakdownValues);
 
       var barX = function(d, i) { return (i * 44); };
-      var barY = function(d, i) { return (100 + (200 - (d / maxValue * 200))); };
+      var barY = function(d, i) { return (200 - (d / maxValue * 200)); };
       var barHeight = function(d) { return (d / maxValue * 200); };
       var barWidth = 40;
 
@@ -85,7 +93,7 @@ $('#crime-filter-button').click(function(e) {
       bars.enter()
         .append("rect")
         .attr("x", barX)
-        .attr("y", 300)
+        .attr("y", 200)
         .attr("width", barWidth)
         .attr("height", 0)
         .transition()
@@ -104,7 +112,7 @@ $('#crime-filter-button').click(function(e) {
       text.exit().remove();
 
       textRotate = function(d, i) { return "rotate(90," + barX(d, i) + ",200)"; };
-      textX = function(d, i) { return 110 + barX(d, i); };
+      textX = function(d, i) { return 10 + barX(d, i); };
 
       text.enter()
         .append("text")
@@ -130,7 +138,7 @@ $('#crime-filter-button').click(function(e) {
     label.enter()
       .append("text")
       .attr("x", function(d, i) { return 20 + barX(d, i); })
-      .attr("y", function(d) { return (95 + (200 - d / maxValue * 200)); })
+      .attr("y", function(d) { return (-5 + (200 - d / maxValue * 200)); })
       .attr("style", "font-family: 'Arial'; font-size: 12px;")
       .attr("class", "val-label")
       .attr("text-anchor", "middle")
@@ -142,7 +150,7 @@ $('#crime-filter-button').click(function(e) {
       .attr("text-anchor", "middle")
       .text(function(d) { return d })
       .transition()
-      .attr("y", function(d) { return (95 + (200 - d / maxValue * 200)); });
+      .attr("y", function(d) { return (-5 + (200 - d / maxValue * 200)); });
     });
   });
 </script>
