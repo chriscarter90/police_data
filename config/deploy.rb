@@ -1,4 +1,4 @@
-lock "3.6.1"
+lock "3.7.1"
 
 set :application, "police_data"
 set :repo_url, "git@github.com:chriscarter90/police_data.git"
@@ -9,7 +9,7 @@ set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
 set :keep_releases, 5
 set :rvm_type, :user
-set :rvm_ruby_version, "ruby-2.3.0"
+set :rvm_ruby_version, "ruby-2.3.3"
 
 set :puma_rackup, -> { File.join(current_path, "config.ru") }
 set :puma_state, "#{shared_path}/tmp/pids/puma.state"
