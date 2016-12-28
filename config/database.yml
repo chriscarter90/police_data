@@ -11,7 +11,3 @@ development:
 test:
   <<: *default
   database: police_data_test
-
-production:
-  <<: *default
-  pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
