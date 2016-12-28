@@ -1,5 +1,5 @@
 <div class="row">
-  <h3><span id="crime-count"><%= @count %></span> Crimes reported in 2016 in London</h3>
+  <h3 id="crime-count"><%= @count %> <%= "crime".pluralize(@count) %> reported in 2016 in London</h3>
 
   <div class="col-md-6">
     <%= button_tag 'Filter', class: 'crime-filter-button' %>
@@ -47,7 +47,7 @@
 </style>
 
 <script>
-$('.crime-filter-button').click(function(e) {
+  $('.crime-filter-button').click(function(e) {
     var checkedCategories = [],
         checkedOutcomes = [];
 
@@ -62,7 +62,9 @@ $('.crime-filter-button').click(function(e) {
       var totalCount = data.totalCount;
       var breakdowns = data.breakdowns;
 
-      $('#crime-count').text(totalCount);
+      $('#crime-count').text(totalCount +
+          (totalCount == 1 ? " crime" : " crimes") +
+          " reported in 2016 in London");
 
       var svg;
 
@@ -71,8 +73,8 @@ $('.crime-filter-button').click(function(e) {
       } else {
         var svg = d3.select("#d3")
           .append("svg")
-          .attr("width", "100%")
-          .attr("height", 500);
+          .attr("width", 120 + 2 + (data.breakdowns.length - 1) * 22)
+          .attr("height", 330);
       }
 
       breakdownMonths = $.map(breakdowns, function(arr) { return arr[0] });
@@ -80,10 +82,10 @@ $('.crime-filter-button').click(function(e) {
 
       var maxValue = Math.max.apply(Math, breakdownValues);
 
-      var barX = function(d, i) { return (i * 44); };
+      var barX = function(d, i) { return (i * 22); };
       var barY = function(d, i) { return (200 - (d / maxValue * 200)); };
       var barHeight = function(d) { return (d / maxValue * 200); };
-      var barWidth = 40;
+      var barWidth = 20;
 
       bars = svg.selectAll("rect")
         .data(breakdownValues);
@@ -98,20 +100,22 @@ $('.crime-filter-button').click(function(e) {
         .attr("height", 0)
         .transition()
         .attr("height", barHeight)
-        .attr("y", barY);
+        .attr("y", barY)
+        .attr("fill", function(v) { return "rgb(" + (v / parseFloat(maxValue) * 255) + "," + ((maxValue - v) / parseFloat(maxValue) * 255) + ",0)" });
 
       bars.attr("x", barX)
         .attr("width", barWidth)
         .transition()
         .attr("height", barHeight)
-        .attr("y", barY);
+        .attr("y", barY)
+        .attr("fill", function(v) { return "rgb(" + (v / parseFloat(maxValue) * 255) + "," + ((maxValue - v) / parseFloat(maxValue) * 255) + ",0)" });
 
       text = svg.selectAll("text.x-label")
         .data(breakdownMonths);
 
       text.exit().remove();
 
-      textRotate = function(d, i) { return "rotate(90," + barX(d, i) + ",200)"; };
+      textRotate = function(d, i) { return "rotate(45," + (barX(d, i) - 22) + ",200)"; };
       textX = function(d, i) { return 10 + barX(d, i); };
 
       text.enter()
@@ -119,14 +123,14 @@ $('.crime-filter-button').click(function(e) {
         .attr("x", textX)
         .attr("y", 190)
         .attr("transform", textRotate)
-        .attr("style", "font-family: 'Arial'; font-size: 32px;")
+        .attr("style", "font-family: 'Arial'; font-size: 12px;")
         .attr("class", "x-label")
         .text(function(d) { return d });
 
       text.attr("x", textX)
         .attr("y", 190)
         .attr("transform", textRotate)
-        .attr("style", "font-family: 'Arial'; font-size: 32px;")
+        .attr("style", "font-family: 'Arial'; font-size: 12px;")
         .attr("class", "x-label")
         .text(function(d) { return d });
 
@@ -137,16 +141,16 @@ $('.crime-filter-button').click(function(e) {
 
     label.enter()
       .append("text")
-      .attr("x", function(d, i) { return 20 + barX(d, i); })
+      .attr("x", function(d, i) { return 10 + barX(d, i); })
       .attr("y", function(d) { return (-5 + (200 - d / maxValue * 200)); })
-      .attr("style", "font-family: 'Arial'; font-size: 12px;")
+      .attr("style", "font-family: 'Arial'; font-size: 6px;")
       .attr("class", "val-label")
       .attr("text-anchor", "middle")
       .text(function(d) { return d });
 
-    label.attr("x", function(d, i) { return 20 + barX(d, i); })
-      .attr("style", "font-family: 'Arial'; font-size: 12px;")
-      .attr("class", "x-label")
+    label.attr("x", function(d, i) { return 10 + barX(d, i); })
+      .attr("style", "font-family: 'Arial'; font-size: 6px;")
+      .attr("class", "val-label")
       .attr("text-anchor", "middle")
       .text(function(d) { return d })
       .transition()

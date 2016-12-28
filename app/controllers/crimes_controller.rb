@@ -15,7 +15,7 @@ class CrimesController < ApplicationController
       format.json {
         render json: {
           totalCount: @count,
-          breakdowns: Crime.group_by_month(scope).map { |m| [m.date, m.total] }
+          breakdowns: Crime.group_by_month(scope).map { |m| [m.date.strftime("%B %Y"), m.total] }
         }
       }
     end

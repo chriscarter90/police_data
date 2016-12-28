@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129092722) do
+ActiveRecord::Schema.define(version: 20161219163119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,9 @@ ActiveRecord::Schema.define(version: 20161129092722) do
     t.string  "location"
     t.string  "crime_type"
     t.string  "outcome"
+    t.index ["crime_type"], name: "index_crimes_on_crime_type", using: :btree
+    t.index ["date"], name: "index_crimes_on_date", using: :btree
+    t.index ["outcome"], name: "index_crimes_on_outcome", using: :btree
   end
 
 end

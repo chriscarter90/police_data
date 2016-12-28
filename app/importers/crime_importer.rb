@@ -3,7 +3,7 @@ require "csv"
 class CrimeImporter
   class << self
     def import
-      Dir.glob(Rails.root.join("data", "2016-*", "2016-*-metropolitan-*.csv")) do |filename|
+      Dir.glob(Rails.root.join("data", "2015-*", "2015-*-metropolitan-*.csv")) do |filename|
         print "Parsing: #{filename.split("/").last}..."
         CSV.foreach(filename, headers: true) do |row|
           Crime.create!(
