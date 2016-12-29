@@ -3,7 +3,7 @@ lock "3.7.1"
 set :application, "police_data"
 set :repo_url, "git@github.com:chriscarter90/police_data.git"
 set :branch, :master
-set :deploy_to, "/home/deploy/police_data"
+set :deploy_to, "/mnt/xvdf/home/deploy/police_data"
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
