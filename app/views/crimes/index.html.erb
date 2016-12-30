@@ -57,7 +57,7 @@
     checkedOutcomes = $.map($('#crime-filter-outcomes').find('input[type=checkbox]:checked'), function(elem) { return $(elem).val(); });
 
     $.getJSON(
-      '/crimes', {category: checkedCategories, outcome: checkedOutcomes}
+      '<%= crimes_path %>', {category: checkedCategories, outcome: checkedOutcomes}
     ).done(function(data) {
       var totalCount = data.totalCount;
       var breakdowns = data.breakdowns;
